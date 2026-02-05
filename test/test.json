@@ -1,0 +1,515 @@
+{
+  "info": {
+    "name": "Backend API Tests",
+    "description": "Complete test suite for all backend endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "📝 AUTHENTICATION",
+      "item": [
+        {
+          "name": "1. User Signup",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"testuser\",\n  \"email\": \"test@example.com\",\n  \"password\": \"SecurePass123!\",\n  \"role\": \"user\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/signup",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "signup"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. User Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"SecurePass123!\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3. Admin Login (Get Admin Token)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"AdminPass123!\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "💰 WALLET OPERATIONS",
+      "item": [
+        {
+          "name": "1. Get Wallet Balance",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/wallet/:userId/:assetId",
+              "host": ["{{base_url}}"],
+              "path": ["api", "wallet", ":userId", ":assetId"],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "user_id_here"
+                },
+                {
+                  "key": "assetId",
+                  "value": "asset_id_here"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. Top Up Wallet (Admin Only)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"user_id_here\",\n  \"assetId\": \"asset_id_here\",\n  \"amount\": 1000\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/wallet/topup",
+              "host": ["{{base_url}}"],
+              "path": ["api", "wallet", "topup"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3. Give Bonus (Admin Only)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"user_id_here\",\n  \"assetId\": \"asset_id_here\",\n  \"amount\": 500,\n  \"reason\": \"Welcome bonus\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/wallet/bonus",
+              "host": ["{{base_url}}"],
+              "path": ["api", "wallet", "bonus"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4. Convert Silver to Gold",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"user_id_here\",\n  \"silverAmount\": 500\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/wallet/convert/silver-to-gold",
+              "host": ["{{base_url}}"],
+              "path": ["api", "wallet", "convert", "silver-to-gold"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5. Convert Gold to Diamond",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"user_id_here\",\n  \"goldAmount\": 500\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/wallet/convert/gold-to-diamond",
+              "host": ["{{base_url}}"],
+              "path": ["api", "wallet", "convert", "gold-to-diamond"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "🛒 ITEM MANAGEMENT",
+      "item": [
+        {
+          "name": "1. Get All Items",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/items",
+              "host": ["{{base_url}}"],
+              "path": ["api", "items"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. Purchase Item",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"user_id_here\",\n  \"itemId\": \"item_id_here\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/items/buy",
+              "host": ["{{base_url}}"],
+              "path": ["api", "items", "buy"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "✅ TASK MANAGEMENT",
+      "item": [
+        {
+          "name": "1. Complete Task",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"user_id_here\",\n  \"taskId\": \"task_id_here\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/tasks/complete",
+              "host": ["{{base_url}}"],
+              "path": ["api", "tasks", "complete"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "👑 ADMIN OPERATIONS",
+      "item": [
+        {
+          "name": "1. Create Task (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Daily Login\",\n  \"description\": \"Login to the app daily\",\n  \"reward_silver\": 100\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/admin/tasks",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "tasks"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. Get All Tasks (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/admin/tasks",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "tasks"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3. Delete Task (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/admin/tasks/:taskId",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "tasks", ":taskId"],
+              "variable": [
+                {
+                  "key": "taskId",
+                  "value": "task_id_here"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4. Create Item (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Premium Sword\",\n  \"category\": \"weapon\",\n  \"price_gold\": 1500\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/admin/items",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "items"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5. Get All Items (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/admin/items",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "items"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "6. Delete Item (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/admin/items/:itemId",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "items", ":itemId"],
+              "variable": [
+                {
+                  "key": "itemId",
+                  "value": "item_id_here"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "7. Set Conversion Rates (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"silver_to_gold\": 50,\n  \"gold_to_diamond\": 50\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/admin/conversion-rates",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "conversion-rates"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:4000"
+    },
+    {
+      "key": "user_token",
+      "value": ""
+    },
+    {
+      "key": "admin_token",
+      "value": ""
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "pm.test(\"Status code is 200\", function () {",
+          "    pm.response.to.have.status(200);",
+          "});"
+        ]
+      }
+    }
+  ]
+}
