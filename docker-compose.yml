@@ -31,18 +31,17 @@
 #   pgdata:
 
 
-
 version: "3.8"
+
 services:
   app:
-    build: 
+    build: .
     container_name: wallet-api
     restart: always
     ports:
       - "4000:4000"
+    env_file:
+      - .env          # <-- THIS LINE IS CRUCIAL
     environment:
-      DATABASE_URL: ${DATABASE_URL}
+      DATABASE_URL: ${SUPABASE_DB_URL}
       JWT_SECRET: ${JWT_SECRET}
-
-volumes:
-  pgdata:

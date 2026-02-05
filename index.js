@@ -13,6 +13,8 @@ const walletRoutes = require("./routers/wallet.routes")
 
 app.use(express.json())
 
+
+
 pool.connect()
 initModels()
 

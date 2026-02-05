@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const wallet = require("../controllers/wallet.controller");
-const {authenticate} = require("../middleware/auth.middleware");
+const {authenticate,} = require("../middleware/auth.middleware");
 const validate = require("../middleware/validate.middleware");
 const { 
   topUpSchema, 
@@ -28,8 +28,4 @@ router.post( "/:userId/convert/silver-to-gold", validate(convertSilverSchema), w
 router.post( "/:userId/convert/gold-to-diamond", validate(convertGoldSchema), wallet.convertGoldToDiamond);
 
 module.exports = router;
-
-
-
-
 

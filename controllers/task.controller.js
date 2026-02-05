@@ -4,7 +4,8 @@ const { v4: uuidv4 } = require("uuid");
 
 
 const completeTask = async (req, res) => {
-  const { userId, taskId } = req.body;
+  const userId = req.user.id;
+  const { taskId } = req.body;
   const txId = uuidv4();
 
   if (!userId || !taskId) {
