@@ -37,6 +37,7 @@ services:
   app:
     build: .
     container_name: wallet-api
+    
     restart: always
     ports:
       - "4000:4000"

@@ -1,3 +1,7 @@
+
+
+
+
 const pool = require("../config/database");
 const { v4: uuidv4 } = require("uuid");
 
@@ -202,8 +206,8 @@ const giveBonus = async (req, res) => {
 
 // SPEND (Buy item using GOLD)
 const spendWallet = async (req, res) => {
-  const { userId } = req.params;
-  const { itemId } = req.body;
+  const userId = Number(req.params.userId);   
+  const itemId = Number(req.params.itemId);   
   const txId = uuidv4();
   const client = await pool.connect();
 
@@ -219,25 +223,45 @@ const spendWallet = async (req, res) => {
       throw new Error("Item not found");
     }
 
-    const price = itemRes.rows[0].price_gold;
+    const price = Number(itemRes.rows[0].price_gold); 
 
     const assetRes = await client.query(
-      "SELECT id FROM asset_types WHERE name = 'Gold'"
+      "SELECT id FROM asset_types WHERE LOWER(name) = 'gold'"
     );
 
-    const goldAssetId = assetRes.rows[0].id;
+    if (assetRes.rows.length === 0) {
+      throw new Error("Gold asset is not configured");
+    }
+
+    const goldAssetId = Number(assetRes.rows[0].id);
     const treasuryId = await getTreasuryId(client, goldAssetId);
 
     const balRes = await client.query(
-      `SELECT balance FROM wallets 
+      `SELECT balance 
+       FROM wallets 
        WHERE user_id = $1 AND asset_id = $2 
        FOR UPDATE`,
       [userId, goldAssetId]
     );
 
-    if (balRes.rows.length === 0 || balRes.rows[0].balance < price) {
-      throw new Error("Insufficient Gold balance");
+    if (balRes.rows.length === 0) {
+      throw new Error(
+        `User wallet not found for user=${userId}, asset=${goldAssetId}`
+      );
     }
+
+    const userBalance = Number(balRes.rows[0].balance); 
+
+    if (userBalance < price) {
+      throw new Error(
+        `Insufficient Gold: have ${userBalance}, need ${price}`
+      );
+    }
+
+    await client.query(
+      "SELECT balance FROM system_wallet WHERE id = $1 FOR UPDATE",
+      [treasuryId]
+    );
 
     await client.query(
       `UPDATE wallets 
@@ -261,7 +285,13 @@ const spendWallet = async (req, res) => {
     );
 
     await client.query("COMMIT");
-    res.json({ message: "Item purchased", itemId, price, txId });
+
+    res.json({
+      message: "Item purchased successfully",
+      itemId,
+      price,
+      txId
+    });
 
   } catch (err) {
     await client.query("ROLLBACK");
@@ -271,10 +301,11 @@ const spendWallet = async (req, res) => {
   }
 };
 
+
 // CONVERT SILVER → GOLD
 const convertSilverToGold = async (req, res) => {
-  const { userId } = req.params;
-  const { silverAmount } = req.body;
+
+  const {userId, silverAmount } = req.body;
   const txId = uuidv4();
 
   if (silverAmount % 50 !== 0) {
@@ -344,8 +375,7 @@ const convertSilverToGold = async (req, res) => {
 
 // CONVERT GOLD → DIAMOND
 const convertGoldToDiamond = async (req, res) => {
-  const { userId } = req.params;
-  const {goldAmount } = req.body;
+  const {userId, goldAmount } = req.body;
   const txId = uuidv4();
 
   if (goldAmount % 50 !== 0) {

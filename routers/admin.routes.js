@@ -8,19 +8,19 @@ const { apiLimiter } = require("../middleware/rateLimit.middleware");
 
 router.use(apiLimiter);      
 router.use(authenticate);    
-router.use(requireAdmin);    
+// router.use(requireAdmin);    
 
-router.post("/tasks", admin.createTask);
-router.post("/tasks/bulk", admin.createBulkTasks);
+router.post("/tasks",requireAdmin, admin.createTask);
+router.post("/tasks/bulk",requireAdmin, admin.createBulkTasks);
 router.get("/tasks", admin.getAllTasks);
-router.delete("/tasks/:taskId", admin.deleteTask);
+router.delete("/tasks/:taskId",requireAdmin, admin.deleteTask);
 
-router.post("/items", admin.createItem);
-router.post("/items/bulk", admin.createBulkItems);
+router.post("/items",requireAdmin, admin.createItem);
+router.post("/items/bulk",requireAdmin, admin.createBulkItems);
 router.get("/items", admin.getAllItems);
-router.delete("/items/:itemId", admin.deleteItem);
+router.delete("/items/:itemId",requireAdmin, admin.deleteItem);
 
-router.post("/conversion-rates", admin.setConversionRates);
+router.post("/conversion-rates",requireAdmin, admin.setConversionRates);
 
 module.exports = router;
 
