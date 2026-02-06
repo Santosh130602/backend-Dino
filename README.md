@@ -103,6 +103,15 @@ nodemon index.js
 node index.js
 ```
 
+### DB Setup
+```bash 
+# run this query in you DB
+INSERT INTO system_wallet (asset_id, balance)
+SELECT id, 1000000 FROM asset_types
+ON CONFLICT (asset_id) DO NOTHING;
+
+```
+
 ## 🚀 Live Deployment
 
 The application is deployed and fully operational:
@@ -648,28 +657,6 @@ dino-wallet/
 - **Availability**: 99.9% uptime target
 
 
-## 🤝 Contributing
-
-1. **Fork** the repository
-2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
-3. **Commit** changes (`git commit -m 'Add amazing feature'`)
-4. **Push** to branch (`git push origin feature/amazing-feature`)
-5. **Open** a Pull Request
-
-### Development Guidelines
-- Follow existing code style and conventions
-- Write tests for new features
-- Update documentation as needed
-- Use meaningful commit messages
-
-## 📄 License
-
-This project is proprietary software of Dino Ventures.
-
-**Confidential & Proprietary**
-Unauthorized copying, distribution, or modification is strictly prohibited.
-
----
 
 <div align="center">
 
